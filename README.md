@@ -1,7 +1,7 @@
 When you have a very long line it looks like this by dafault in Brackets editor:
 
     1 line with no indentation                                       |
-    2     long line with indentation long line with indentation long |
+    2     long line with indentation long line with indentation long | <- soft wrap
       line with indentation                                          |
     3 another line                                                   |
 
