@@ -1,7 +1,11 @@
 define(function (require, exports, module) {
   "use strict";
 
-  // Indent soft wraps, but only when line is indented with spaces
+  /**
+   * Indent softwrapped lines
+   * @param editor Instance of Editor
+   * @param forceRefresh Flag to force editor refresh
+   */
   function handleEditor(editor, forceRefresh) {
     if (!editor) return;
     var changedSomething = false;
@@ -9,7 +13,7 @@ define(function (require, exports, module) {
       var firstNonSpace = line.text.search(/[^\s\t]/);
       var tabsCount = line.text.substr(0, firstNonSpace).replace(/[^\t]/g, "").length;
       var off = firstNonSpace * cm.defaultCharWidth() + tabsCount * cm.getOption("tabSize");
-      if (tabsCount === 0) {
+      if (tabsCount === 0) { // only if no tabs!
         var compStyle = window.getComputedStyle(elt, null),
             textIndent = "-" + off + "px",
             paddingLeft = off + "px";
@@ -32,7 +36,7 @@ define(function (require, exports, module) {
       EditorManager = brackets.getModule("editor/EditorManager");
 
   AppInit.appReady(function () {
-    handleEditor(EditorManager.getCurrentFullEditor(), true);
+    handleEditor(EditorManager.getCurrentFullEditor(), true); // Force refresh when started
     $(EditorManager).on('activeEditorChange', function (event, focusedEditor, lostEditor) {
       handleEditor(focusedEditor, false);
     });
