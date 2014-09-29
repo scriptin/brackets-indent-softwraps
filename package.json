@@ -6,6 +6,12 @@
     "version": "0.1.0",
     "author": "Dmitry Shpika <scrptn@gmail.com> (http://scriptin.github.io/)",
     "license": "MIT",
+    "keywords": [
+        "indent",
+        "indentation",
+        "wrap",
+        "softwrap"
+    ],
     "engines": {
         "brackets": ">=0.43.0"
     }
