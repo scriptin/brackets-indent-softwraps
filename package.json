@@ -1,4 +1,4 @@
-﻿{
+{
     "name": "scriptin.indent-softwraps",
     "title": "Indent softwrapped lines",
     "description": "When a line does not fit, it is softwrapped. This plugin makes it so wrapped part (2nd and subsequent lines) has the same indentation, as 1st line",
