@@ -3,7 +3,7 @@
     "title": "Indent softwrapped lines",
     "description": "When a line does not fit, it is softwrapped. This plugin makes it so wrapped part (2nd and subsequent lines) has the same indentation, as 1st line",
     "homepage": "https://github.com/scriptin/brackets-indent-softwraps",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "author": "Dmitry Shpika <***REMOVED***>",
     "license": "MIT",
     "keywords": [
@@ -13,6 +13,6 @@
         "softwrap"
     ],
     "engines": {
-        "brackets": ">=0.43.0"
+        "brackets": ">=1.1.0"
     }
 }
