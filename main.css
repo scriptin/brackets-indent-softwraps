@@ -1,3 +1,3 @@
-.cm-tab {
-  display: inline;
+.softwraps-indented * {
+  text-indent: 0;
 }

@@ -1,45 +1,48 @@
 define(function (require, exports, module) {
   "use strict";
 
-  var ExtensionUtils = brackets.getModule("utils/ExtensionUtils");
+  var ExtensionUtils = brackets.getModule("utils/ExtensionUtils"),
+      AppInit        = brackets.getModule("utils/AppInit"),
+      EditorManager  = brackets.getModule("editor/EditorManager");
+
   ExtensionUtils.loadStyleSheet(module, "main.css");
 
-  /**
-   * Indent softwrapped lines
-   * @param editor Instance of Editor
-   * @param forceRefresh Flag to force editor refresh
-   */
-  function handleEditor(editor, forceRefresh) {
+  function indentSoftWraps(editor) {
     if (!editor) return;
-    var changedSomething = false;
     editor._codeMirror.on("renderLine", function (cm, line, elt) {
-      var firstNonSpace = line.text.search(/\S/);
-      var tabsCount = line.text.substr(0, firstNonSpace).replace(/[^\t]/g, "").length;
-      var off = ((firstNonSpace - tabsCount) + (tabsCount * cm.getOption("tabSize"))) * cm.defaultCharWidth();
-      var compStyle = window.getComputedStyle(elt, null),
-          textIndent = "-" + off + "px",
-          paddingLeft = off + "px";
-      if (textIndent != compStyle["text-indent"]) {
+      var firstNonSpace = line.text.search(/\S/),
+          tabsCount     = line.text.substr(0, firstNonSpace).replace(/[^\t]/g, "").length,
+          nonTabsCount  = firstNonSpace - tabsCount,
+          off           = (nonTabsCount + tabsCount * cm.getOption("tabSize")) * cm.defaultCharWidth(),
+          eltStyle      = window.getComputedStyle(elt, null),
+          textIndent    = -off + "px",
+          paddingLeft   =  off + "px";
+      if (textIndent != eltStyle["text-indent"]) {
         elt.style.textIndent = textIndent;
-        changedSomething = true;
       }
-      if (paddingLeft != compStyle["padding-left"]) {
+      if (paddingLeft != eltStyle["padding-left"]) {
         elt.style.paddingLeft = paddingLeft;
-        changedSomething = true;
       }
+      addClass(elt, "softwraps-indented");
     });
-    if (changedSomething || forceRefresh) {
-      editor.refresh();
+    editor.refresh();
+  }
+
+  function addClass(elt, newClassName) {
+    var r = new RegExp("\\b" + newClassName + "\\b")
+    if (!r.test(elt.className)) {
+      if (elt.className.trim() === "") {
+        elt.className = newClassName;
+      } else {
+        elt.className += " " + newClassName;
+      }
     }
   }
 
-  var AppInit = brackets.getModule("utils/AppInit"),
-      EditorManager = brackets.getModule("editor/EditorManager");
-
   AppInit.appReady(function () {
-    handleEditor(EditorManager.getCurrentFullEditor(), true); // Force refresh when started
+    indentSoftWraps(EditorManager.getCurrentFullEditor());
     $(EditorManager).on("activeEditorChange", function (event, focusedEditor, lostEditor) {
-      handleEditor(focusedEditor, false);
+      indentSoftWraps(focusedEditor);
     });
   });
 });
