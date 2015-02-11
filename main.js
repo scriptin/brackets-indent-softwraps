@@ -1,9 +1,10 @@
 define(function (require, exports, module) {
   "use strict";
 
-  var ExtensionUtils = brackets.getModule("utils/ExtensionUtils"),
-      AppInit        = brackets.getModule("utils/AppInit"),
-      EditorManager  = brackets.getModule("editor/EditorManager");
+  var ExtensionUtils     = brackets.getModule("utils/ExtensionUtils"),
+      AppInit            = brackets.getModule("utils/AppInit"),
+      EditorManager      = brackets.getModule("editor/EditorManager"),
+      PreferencesManager = brackets.getModule("preferences/PreferencesManager");
 
   ExtensionUtils.loadStyleSheet(module, "main.css");
 
@@ -11,13 +12,14 @@ define(function (require, exports, module) {
     if (!editor) return;
     editor._codeMirror.on("renderLine", function (cm, line, elt) {
       var firstNonSpace = line.text.search(/\S/);
-      if (firstNonSpace > 0) {
-        var tabsCount     = line.text.substr(0, firstNonSpace).replace(/[^\t]/g, "").length,
-            nonTabsCount  = firstNonSpace - tabsCount,
-            off           = (nonTabsCount + tabsCount * cm.getOption("tabSize")) * cm.defaultCharWidth(),
-            eltStyle      = window.getComputedStyle(elt, null),
-            textIndent    = -off + "px",
-            paddingLeft   =  off + "px";
+      if (firstNonSpace > -1) {
+        var tabsCount    = line.text.substr(0, firstNonSpace).replace(/[^\t]/g, "").length,
+            nonTabsCount = firstNonSpace - tabsCount,
+            off          = (nonTabsCount + tabsCount * cm.getOption("tabSize")) * cm.defaultCharWidth(),
+            eltStyle     = window.getComputedStyle(elt, null),
+            textIndent   = -off + "px",
+            noGutter     = !PreferencesManager.get("showLineNumbers"),
+            paddingLeft  = (noGutter ? 15 : 0) + off + "px";
         if (textIndent != eltStyle["text-indent"]) {
           elt.style.textIndent = textIndent;
         }
@@ -30,9 +32,12 @@ define(function (require, exports, module) {
     editor.refresh();
   }
 
+  function hasClass(elt, className) {
+	return (new RegExp("\\b" + className + "\\b")).test(elt.className);
+  }
+
   function addClass(elt, newClassName) {
-    var r = new RegExp("\\b" + newClassName + "\\b")
-    if (!r.test(elt.className)) {
+    if (!hasClass(elt, newClassName)) {
       if (elt.className.trim() === "") {
         elt.className = newClassName;
       } else {
