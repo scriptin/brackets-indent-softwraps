@@ -11,7 +11,7 @@ define(function (require, exports, module) {
     if (!editor) return;
     editor._codeMirror.on("renderLine", function (cm, line, elt) {
       var firstNonSpace = line.text.search(/\S/);
-      if (firstNonSpace > 0)
+      if (firstNonSpace > 0) {
         var tabsCount     = line.text.substr(0, firstNonSpace).replace(/[^\t]/g, "").length,
             nonTabsCount  = firstNonSpace - tabsCount,
             off           = (nonTabsCount + tabsCount * cm.getOption("tabSize")) * cm.defaultCharWidth(),
