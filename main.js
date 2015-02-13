@@ -8,6 +8,8 @@ define(function (require, exports, module) {
 
   ExtensionUtils.loadStyleSheet(module, "main.css");
 
+  var DEFAULT_GUTTER_WIDTH = 15;
+
   function indentSoftWraps(editor) {
     if (!editor) return;
     editor._codeMirror.on("renderLine", function (cm, line, elt) {
@@ -18,7 +20,7 @@ define(function (require, exports, module) {
             eltStyle    = window.getComputedStyle(elt, null),
             textIndent  = -offset + "px",
             noGutter    = !PreferencesManager.get("showLineNumbers"),
-            paddingLeft = (noGutter ? 15 : 0) + offset + "px";
+            paddingLeft = (noGutter ? DEFAULT_GUTTER_WIDTH : 0) + offset + "px";
         if (textIndent != eltStyle["text-indent"]) {
           elt.style.textIndent = textIndent;
         }
@@ -49,7 +51,7 @@ define(function (require, exports, module) {
   }
 
   function hasClass(elt, className) {
-	return (new RegExp("\\b" + className + "\\b")).test(elt.className);
+    return (new RegExp("\\b" + className + "\\b")).test(elt.className);
   }
 
   function addClass(elt, newClassName) {
