@@ -13,13 +13,12 @@ define(function (require, exports, module) {
     editor._codeMirror.on("renderLine", function (cm, line, elt) {
       var firstNonSpace = line.text.search(/\S/);
       if (firstNonSpace > -1) {
-        var tabsCount    = line.text.substr(0, firstNonSpace).replace(/[^\t]/g, "").length,
-            nonTabsCount = firstNonSpace - tabsCount,
-            off          = (nonTabsCount + tabsCount * cm.getOption("tabSize")) * cm.defaultCharWidth(),
-            eltStyle     = window.getComputedStyle(elt, null),
-            textIndent   = -off + "px",
-            noGutter     = !PreferencesManager.get("showLineNumbers"),
-            paddingLeft  = (noGutter ? 15 : 0) + off + "px";
+        var whitespace  = line.text.substr(0, firstNonSpace),
+            offset      = countSpaces(whitespace, cm.getOption("tabSize")) * cm.defaultCharWidth(),
+            eltStyle    = window.getComputedStyle(elt, null),
+            textIndent  = -offset + "px",
+            noGutter    = !PreferencesManager.get("showLineNumbers"),
+            paddingLeft = (noGutter ? 15 : 0) + offset + "px";
         if (textIndent != eltStyle["text-indent"]) {
           elt.style.textIndent = textIndent;
         }
@@ -30,6 +29,23 @@ define(function (require, exports, module) {
       addClass(elt, "softwraps-indented");
     });
     editor.refresh();
+  }
+
+  function countSpaces(ws, tabSize) {
+    var fullTabs = 0, remainderSpaces = 0;
+    for (var i = 0; i < ws.length; i++) {
+      if (ws[i] === "\t") {
+        fullTabs++;
+        remainderSpaces = 0;
+      } else { // Assuming all other whitespace chars are just spaces
+        remainderSpaces++;
+        if (remainderSpaces === tabSize) {
+          fullTabs++;
+          remainderSpaces = 0;
+        }
+      }
+    }
+    return fullTabs * tabSize + remainderSpaces;
   }
 
   function hasClass(elt, className) {
