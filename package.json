@@ -1,7 +1,7 @@
 {
     "name": "scriptin.indent-softwraps",
     "title": "Indent softwrapped lines",
-    "description": "When a line does not fit, it is softwrapped. This plugin makes it so wrapped part (2nd and subsequent lines) has the same indentation, as 1st line",
+    "description": "When a line does not fit in editing area, it is softwrapped. This extension makes it so the wrapped part (2nd and subsequent lines) has the same indentation as the 1st line",
     "homepage": "https://github.com/scriptin/brackets-indent-softwraps",
     "version": "0.2.4",
     "author": "Dmitry Shpika <***REMOVED***>",
@@ -10,7 +10,9 @@
         "indent",
         "indentation",
         "wrap",
-        "softwrap"
+        "soft wrap",
+        "softwrap",
+        "word wrap"
     ],
     "engines": {
         "brackets": ">=1.1.0"
