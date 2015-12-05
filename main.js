@@ -10,6 +10,24 @@ define(function (require, exports, module) {
 
   var DEFAULT_GUTTER_WIDTH = 15;
 
+  /**
+   * https://github.com/scriptin/brackets-indent-softwraps/issues/13
+   *
+   * There are themes which apply some custom `padding-left`. We need
+   * to extract that value and add it each time we calculate `padding-left`
+   * and `text-indent` properties for wrapped lines.
+   */
+  var paddingLeftExtracted = false,
+      paddingLeft3rdParty = 0;
+
+  function extractPaddingLeft(elt) {
+    if (!paddingLeftExtracted) {
+      paddingLeft3rdParty = parseInt(window.getComputedStyle(elt)["padding-left"]);
+      paddingLeftExtracted = true;
+    }
+    return paddingLeft3rdParty;
+  }
+
   function indentSoftWraps(editor) {
     if (!editor) return;
     editor._codeMirror.on("renderLine", function (cm, line, elt) {
@@ -18,9 +36,9 @@ define(function (require, exports, module) {
         var whitespace  = line.text.substr(0, firstNonSpace),
             offset      = countSpaces(whitespace, cm.getOption("tabSize")) * cm.defaultCharWidth(),
             eltStyle    = window.getComputedStyle(elt, null),
-            textIndent  = -offset + "px",
+            textIndent  = -(offset + extractPaddingLeft(elt)) + "px",
             noGutter    = !PreferencesManager.get("showLineNumbers"),
-            paddingLeft = (noGutter ? DEFAULT_GUTTER_WIDTH : 0) + offset + "px";
+            paddingLeft = (noGutter ? DEFAULT_GUTTER_WIDTH : 0) + offset + extractPaddingLeft(elt) + "px";
         if (textIndent != eltStyle["text-indent"]) {
           elt.style.textIndent = textIndent;
         }
