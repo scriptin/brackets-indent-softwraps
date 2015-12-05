@@ -35,7 +35,7 @@ define(function (require, exports, module) {
       if (firstNonSpace > -1) {
         var whitespace  = line.text.substr(0, firstNonSpace),
             offset      = countSpaces(whitespace, cm.getOption("tabSize")) * cm.defaultCharWidth(),
-            eltStyle    = window.getComputedStyle(elt, null),
+            eltStyle    = window.getComputedStyle(elt),
             textIndent  = -(offset + extractPaddingLeft(elt)) + "px",
             noGutter    = !PreferencesManager.get("showLineNumbers"),
             paddingLeft = (noGutter ? DEFAULT_GUTTER_WIDTH : 0) + offset + extractPaddingLeft(elt) + "px";
