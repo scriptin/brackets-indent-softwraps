@@ -1,3 +1,5 @@
+**NOTE: this project is no longer supported, because the feature is implemented in Brackets 1.6**
+
 When you have a very long line it looks like this by dafault in Brackets editor:
 
     1 line with no indentation                                       |
