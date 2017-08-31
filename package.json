@@ -4,7 +4,7 @@
     "description": "When a line does not fit in editing area, it is softwrapped. This extension makes it so the wrapped part (2nd and subsequent lines) has the same indentation as the 1st line",
     "homepage": "https://github.com/scriptin/brackets-indent-softwraps",
     "version": "0.2.7",
-    "author": "Dmitry Shpika <***REMOVED***>",
+    "author": "Dmitry Shpika",
     "license": "MIT",
     "keywords": [
         "indent",
